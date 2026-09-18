@@ -1,0 +1,35 @@
+{
+  "name": "prep",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main/server.js",
+  "scripts": {
+    "dev": "tsx watch --env-file=.env src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "migrate": "knex migrate:latest",
+    "migrate:make": "knex migrate:make",
+    "rollback": "knex migrate:rollback",
+    "seed": "knex seed:run",
+    "test": "node --test",
+    "lint": "eslint src"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.1",
+    "eslint": "^10.11.0",
+    "supertest": "^7.2.2",
+    "tsx": "^4.23.13",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "knex": "^3.3.0",
+    "pg": "^8.23.0",
+    "zod": "^4.6.5"
+  }
+}
