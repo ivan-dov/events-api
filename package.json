@@ -13,23 +13,41 @@
     "seed": "knex seed:run",
     "seed:make": "knex seed:make",
     "test": "node --test",
-    "lint": "eslint src"
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/express": "^5.0.6",
+    "@types/lodash": "^4.17.25",
     "@types/node": "^26.6.2",
+    "@types/pg": "^8.23.1",
     "eslint": "^10.11.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.5.1",
+    "prettier": "^3.9.8",
     "supertest": "^7.2.2",
     "tsx": "^4.23.13",
-    "typescript": "^7.0.2"
+    "typescript": "~5.9",
+    "typescript-eslint": "^8.70.0"
   },
   "dependencies": {
     "express": "^5.2.1",
     "knex": "^3.3.0",
+    "lodash": "^4.18.1",
     "pg": "^8.23.0",
     "zod": "^4.6.5"
+  },
+  "lint-staged": {
+    "*.{ts,js}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": "prettier --write"
   }
 }
