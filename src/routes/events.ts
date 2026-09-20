@@ -1,5 +1,11 @@
 import express from 'express';
-import { getEvent, getEvents, GetEventsParams } from '../services/events';
+import {
+    getEvent,
+    getEventAttendees,
+    getEvents,
+    GetEventsParams,
+    hasEvent,
+} from '../services/events';
 import { numberParam } from '../utils/numberParam';
 
 export const eventsRouter = express.Router();
@@ -66,5 +72,28 @@ eventsRouter.get('/:id', async (req, res) => {
         return;
     }
 
+    res.json(result);
+});
+
+eventsRouter.get('/:id/attendees', async (req, res) => {
+    const idParam = numberParam(req.params.id, {
+        allowNegative: false,
+        integer: true,
+        required: true,
+    });
+
+    if (idParam.type === 'error') {
+        res.status(400).json({ error: 'Event id ' + idParam.message });
+        return;
+    }
+
+    if (!(await hasEvent(idParam.value!))) {
+        res.status(404).json({
+            error: `Event with id "${idParam.value}" not found`,
+        });
+        return;
+    }
+
+    const result = await getEventAttendees(idParam.value!);
     res.json(result);
 });
