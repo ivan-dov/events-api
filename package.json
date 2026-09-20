@@ -11,6 +11,7 @@
     "migrate:make": "knex migrate:make",
     "rollback": "knex migrate:rollback",
     "seed": "knex seed:run",
+    "seed:make": "knex seed:make",
     "test": "node --test",
     "lint": "eslint src"
   },
