@@ -1,14 +1,17 @@
 import { DatabaseError } from 'pg';
+import z from 'zod';
 import { knex } from '../db';
+import { ConflictError } from '../errors/conflict';
 import { Booking, CreateBooking } from '../types/booking';
 import { DatabaseErrorCode } from '../types/database-error-code';
-import { ConflictError } from '../errors/conflict';
 
-export type CreateBookingParams = {
-    event_id: number;
-    attendee_id: number;
-    cost_cents: number;
-};
+export const CreateBookingParamsSchema = z.object({
+    attendee_id: z.int().positive(),
+    event_id: z.int().positive(),
+    cost_cents: z.int().nonnegative(),
+});
+
+export type CreateBookingParams = z.infer<typeof CreateBookingParamsSchema>;
 
 export const createBooking = async (params: CreateBookingParams) => {
     try {

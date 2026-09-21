@@ -1,19 +1,22 @@
+import z from 'zod';
 import { knex } from '../db';
 import { Attendee } from '../types/attendee';
 import { BookingStatus } from '../types/booking';
 import { Event } from '../types/event';
 
-export type GetEventsParams = {
-    city?: string;
-    limit?: number;
-    offset?: number;
-};
+export const EventsSearchParamsSchema = z.object({
+    city: z.string().trim().nonempty().optional(),
+    limit: z.coerce.number().int().nonnegative().optional(),
+    offset: z.coerce.number().int().nonnegative().optional(),
+});
+
+export type EventsSearchParams = z.infer<typeof EventsSearchParamsSchema>;
 
 export const getEvents = async ({
     city,
     limit,
     offset,
-}: GetEventsParams = {}): Promise<Event[]> => {
+}: EventsSearchParams = {}): Promise<Event[]> => {
     const query = knex<Event>('events').select('*');
 
     if (city) {
