@@ -4,13 +4,26 @@ import { Attendee } from '../types/attendee';
 import { BookingStatus } from '../types/booking';
 import { Event } from '../types/event';
 
-export const EventsSearchParamsSchema = z.object({
-    city: z.string().trim().nonempty().optional(),
-    limit: z.coerce.number().int().nonnegative().optional(),
-    offset: z.coerce.number().int().nonnegative().optional(),
-});
+export const EventsSearchParamsSchema = z
+    .object({
+        city: z.string().trim().max(255).nonempty(),
+        limit: z.coerce.number().int().nonnegative(),
+        offset: z.coerce.number().int().nonnegative(),
+    })
+    .partial();
+
+export const PatchEventParamsSchema = z
+    .object({
+        name: z.string().trim().max(255).nonempty(),
+        city: z.string().trim().max(255).nonempty(),
+        starts_on: z.iso.date(),
+        budget_cents: z.int().nonnegative(),
+    })
+    .partial()
+    .refine((value) => Object.keys(value).length > 0, 'Must not be empty');
 
 export type EventsSearchParams = z.infer<typeof EventsSearchParamsSchema>;
+export type PatchEventParams = z.infer<typeof PatchEventParamsSchema>;
 
 export const getEvents = async ({
     city,
@@ -40,6 +53,14 @@ export const getEvent = async (id: number): Promise<Event | undefined> => {
 
 export const hasEvent = async (id: number): Promise<boolean> => {
     return !!(await knex<Event>('events').select('id').where({ id }).first());
+};
+
+export const patchEvent = async (id: number, params: PatchEventParams) => {
+    const [result] = await knex<Event>('events')
+        .where({ id })
+        .update(params)
+        .returning('*');
+    return result;
 };
 
 export type EventAttendee = Attendee & {

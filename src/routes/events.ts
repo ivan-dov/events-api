@@ -6,6 +6,8 @@ import {
     getEventAttendees,
     getEvents,
     hasEvent,
+    patchEvent,
+    PatchEventParamsSchema,
 } from '../services/events';
 
 export const eventsRouter = express.Router();
@@ -49,6 +51,37 @@ eventsRouter.get('/:id', async (req, res) => {
     }
 
     res.json(result);
+});
+
+eventsRouter.patch('/:id', async (req, res) => {
+    const parsedId = EventId.safeParse(req.params.id);
+    const parsedBody = PatchEventParamsSchema.safeParse(req.body);
+
+    if (!parsedId.success) {
+        res.status(400).json({
+            error: 'Invalid request',
+            issues: parsedId.error.issues,
+        });
+        return;
+    }
+
+    if (!parsedBody.success) {
+        res.status(400).json({
+            error: 'Invalid request',
+            issues: parsedBody.error.issues,
+        });
+        return;
+    }
+
+    const id = parsedId.data;
+    const updatedDto = await patchEvent(id, parsedBody.data);
+
+    if (updatedDto) {
+        res.json(updatedDto);
+        return;
+    }
+
+    res.status(404).json({ error: `Event with id "${id}" not found` });
 });
 
 eventsRouter.get('/:id/attendees', async (req, res) => {
