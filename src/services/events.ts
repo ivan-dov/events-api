@@ -1,7 +1,10 @@
+import { DatabaseError } from 'pg';
 import z from 'zod';
 import { knex } from '../db';
+import { ConflictError } from '../errors/conflict';
 import { Attendee } from '../types/attendee';
 import { BookingStatus } from '../types/booking';
+import { DatabaseErrorCode } from '../types/database-error-code';
 import { Event } from '../types/event';
 
 export const EventsSearchParamsSchema = z
@@ -61,6 +64,26 @@ export const patchEvent = async (id: number, params: PatchEventParams) => {
         .update(params)
         .returning('*');
     return result;
+};
+
+export const deleteEvent = async (id: number) => {
+    try {
+        const deletedAmount = await knex<Event>('events').where({ id }).del();
+        return deletedAmount === 1;
+    } catch (error) {
+        if (
+            error instanceof DatabaseError &&
+            error.code === DatabaseErrorCode.ForeignKey &&
+            error.table === 'bookings'
+        ) {
+            throw new ConflictError(
+                'foreignKey',
+                `Failed to delete event with id "${id}": this event still has bookings`,
+            );
+        }
+
+        throw error;
+    }
 };
 
 export type EventAttendee = Attendee & {

@@ -1,6 +1,8 @@
 import express from 'express';
 import z from 'zod';
+import { ConflictError } from '../errors/conflict';
 import {
+    deleteEvent,
     EventsSearchParamsSchema,
     getEvent,
     getEventAttendees,
@@ -82,6 +84,38 @@ eventsRouter.patch('/:id', async (req, res) => {
     }
 
     res.status(404).json({ error: `Event with id "${id}" not found` });
+});
+
+eventsRouter.delete('/:id', async (req, res) => {
+    const parsedId = EventId.safeParse(req.params.id);
+
+    if (!parsedId.success) {
+        res.status(400).json({
+            error: 'Invalid request',
+            issues: parsedId.error.issues,
+        });
+        return;
+    }
+
+    const id = parsedId.data;
+
+    try {
+        const deleted = await deleteEvent(id);
+
+        if (deleted) {
+            res.status(204).end();
+            return;
+        }
+
+        res.status(404).json({ error: `Event with id "${id}" not found` });
+    } catch (error) {
+        if (error instanceof ConflictError && error.type === 'foreignKey') {
+            res.status(409).json({ error: error.message });
+            return;
+        }
+
+        throw error;
+    }
 });
 
 eventsRouter.get('/:id/attendees', async (req, res) => {
