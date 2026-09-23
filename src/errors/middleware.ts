@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
+import { inRange } from 'lodash';
 import { ZodError } from 'zod';
 import { DependencyError } from './catalog/dependency-error';
 import { InternalError } from './catalog/internal-error';
@@ -13,7 +14,7 @@ export const errorMiddleware = (
     req: Request,
     res: Response,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    next: NextFunction,
+    _: NextFunction,
 ) => {
     console.error(error);
 
@@ -33,6 +34,14 @@ export const errorMiddleware = (
         error.type === 'entity.parse.failed'
     ) {
         networkError = new MalformedInputError(error.message, { cause: error });
+    } else if (
+        error instanceof Error &&
+        'status' in error &&
+        typeof error.status === 'number' &&
+        inRange(error.status, 400, 600)
+    ) {
+        res.status(error.status).json({ message: error.message });
+        return;
     } else {
         networkError = new InternalError(undefined, { cause: error });
     }
