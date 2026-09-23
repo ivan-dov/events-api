@@ -78,7 +78,7 @@ export const deleteEvent = async (id: number) => {
         ) {
             throw new ConflictError(
                 'foreignKey',
-                `Failed to delete event with id "${id}": this event still has bookings`,
+                `Failed to delete event with id "${id}", this event still has bookings.`,
             );
         }
 

@@ -31,7 +31,7 @@ export const createBooking = async (params: CreateBookingParams) => {
         if (error.code === DatabaseErrorCode.Unique) {
             throw new ConflictError(
                 'unique',
-                'Pair event_id and attendee_id must be unique',
+                'Pair of event_id and attendee_id already exists.',
             );
         }
 

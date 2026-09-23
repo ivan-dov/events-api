@@ -1,5 +1,4 @@
 import express from 'express';
-import { ConflictError } from '../errors/conflict';
 import { hasAttendee } from '../services/attendees';
 import { createBooking, CreateBookingParamsSchema } from '../services/bookings';
 import { hasEvent } from '../services/events';
@@ -7,17 +6,7 @@ import { hasEvent } from '../services/events';
 export const bookingsRouter = express.Router();
 
 bookingsRouter.post('/', async (req, res) => {
-    const parsedBody = CreateBookingParamsSchema.safeParse(req.body);
-
-    if (!parsedBody.success) {
-        res.status(400).json({
-            error: 'Invalid request',
-            issues: parsedBody.error.issues,
-        });
-        return;
-    }
-
-    const params = parsedBody.data;
+    const params = CreateBookingParamsSchema.parse(req.body);
     const errorMessages: string[] = [];
 
     const [eventIsValid, attendeeIsValid] = await Promise.all([
@@ -40,15 +29,6 @@ bookingsRouter.post('/', async (req, res) => {
         return;
     }
 
-    try {
-        const result = await createBooking(params);
-        res.status(201).json(result);
-    } catch (error) {
-        if (error instanceof ConflictError) {
-            res.status(409).json({ error: error.message });
-            return;
-        }
-
-        throw error;
-    }
+    const result = await createBooking(params);
+    res.status(201).json(result);
 });
