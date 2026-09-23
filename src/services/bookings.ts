@@ -1,3 +1,4 @@
+import { Knex } from 'knex';
 import { DatabaseError } from 'pg';
 import z from 'zod';
 import { knex } from '../db';
@@ -6,16 +7,19 @@ import { Booking, CreateBooking } from '../types/booking';
 import { DatabaseErrorCode } from '../types/database-error-code';
 
 export const CreateBookingParamsSchema = z.object({
-    attendee_id: z.int().positive(),
-    event_id: z.int().positive(),
-    cost_cents: z.int().nonnegative(),
+    attendee_id: z.int32().positive(),
+    event_id: z.int32().positive(),
+    cost_cents: z.int32().nonnegative(),
 });
 
 export type CreateBookingParams = z.infer<typeof CreateBookingParamsSchema>;
 
-export const createBooking = async (params: CreateBookingParams) => {
+export const createBooking = async (
+    params: CreateBookingParams,
+    target: Knex = knex,
+) => {
     try {
-        const [result] = await knex<Booking>('bookings')
+        const [result] = await target<Booking>('bookings')
             .insert({
                 ...params,
                 status: 'pending',

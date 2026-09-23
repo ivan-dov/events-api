@@ -6,10 +6,16 @@ import { Attendee } from '../types/attendee';
 import { BookingStatus } from '../types/booking';
 import { DatabaseErrorCode } from '../types/database-error-code';
 import { Event } from '../types/event';
+import { createBooking, CreateBookingParamsSchema } from './bookings';
+
+const NameSchema = z.string().trim().max(255).nonempty();
+const CitySchema = z.string().trim().max(255).nonempty();
+const StartsOnSchema = z.iso.date();
+const BudgetCentsSchema = z.int32().nonnegative();
 
 export const EventsSearchParamsSchema = z
     .object({
-        city: z.string().trim().max(255).nonempty(),
+        city: CitySchema,
         limit: z.coerce.number().int().nonnegative(),
         offset: z.coerce.number().int().nonnegative(),
     })
@@ -17,16 +23,27 @@ export const EventsSearchParamsSchema = z
 
 export const PatchEventParamsSchema = z
     .object({
-        name: z.string().trim().max(255).nonempty(),
-        city: z.string().trim().max(255).nonempty(),
-        starts_on: z.iso.date(),
-        budget_cents: z.int().nonnegative(),
+        name: NameSchema,
+        city: CitySchema,
+        starts_on: StartsOnSchema,
+        budget_cents: BudgetCentsSchema,
     })
     .partial()
     .refine((value) => Object.keys(value).length > 0, 'Must not be empty');
 
+export const CreateEventParamsSchema = z.object({
+    name: NameSchema,
+    city: CitySchema,
+    starts_on: StartsOnSchema,
+    budget_cents: BudgetCentsSchema,
+    bookings: z
+        .array(CreateBookingParamsSchema.omit({ event_id: true }))
+        .min(1),
+});
+
 export type EventsSearchParams = z.infer<typeof EventsSearchParamsSchema>;
 export type PatchEventParams = z.infer<typeof PatchEventParamsSchema>;
+export type CreateEventParams = z.infer<typeof CreateEventParamsSchema>;
 
 export const getEvents = async ({
     city,
@@ -84,6 +101,27 @@ export const deleteEvent = async (id: number) => {
 
         throw error;
     }
+};
+
+export const createEvent = async (params: CreateEventParams) => {
+    return await knex.transaction(async (trx) => {
+        const [result] = await trx<Event>('events')
+            .insert({
+                name: params.name,
+                city: params.city,
+                starts_on: params.starts_on,
+                budget_cents: params.budget_cents,
+            })
+            .returning('*');
+
+        const bookings = await Promise.all(
+            params.bookings.map((booking) =>
+                createBooking({ ...booking, event_id: result.id }, trx),
+            ),
+        );
+
+        return { ...result, bookings };
+    });
 };
 
 export type EventAttendee = Attendee & {

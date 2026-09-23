@@ -1,7 +1,11 @@
 import express from 'express';
 import z from 'zod';
+import { IncorrectInputError } from '../errors/catalog/incorrect-input-error';
 import { NotFoundError } from '../errors/catalog/not-found-error';
+import { getMissingAttendees } from '../services/attendees';
 import {
+    createEvent,
+    CreateEventParamsSchema,
     deleteEvent,
     EventsSearchParamsSchema,
     getEvent,
@@ -55,6 +59,23 @@ eventsRouter.delete('/:id', async (req, res) => {
     }
 
     res.status(204).end();
+});
+
+eventsRouter.post('/', async (req, res) => {
+    const params = CreateEventParamsSchema.parse(req.body);
+    const missingAttendees = await getMissingAttendees(
+        params.bookings.map((booking) => booking.attendee_id),
+    );
+
+    if (missingAttendees.length) {
+        throw new IncorrectInputError(
+            `Unknown attendees ids: ${missingAttendees.join(', ')}`,
+        );
+    }
+
+    const result = await createEvent(params);
+
+    res.status(201).json(result);
 });
 
 eventsRouter.get('/:id/attendees', async (req, res) => {

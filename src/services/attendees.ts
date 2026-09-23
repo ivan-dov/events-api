@@ -1,9 +1,10 @@
 import { knex } from '../db';
-import { Attendee } from '../types/attendee';
 
-export const hasAttendee = async (id: number): Promise<boolean> => {
-    return !!(await knex<Attendee>('attendees')
-        .select('id')
-        .where({ id })
-        .first());
+export const getMissingAttendees = async (ids: number[]): Promise<number[]> => {
+    const existingAttendees = await knex('attendees')
+        .whereIn('id', ids)
+        .pluck('id');
+
+    const existingAttendeesSet = new Set(existingAttendees);
+    return ids.filter((id) => !existingAttendeesSet.has(id));
 };
