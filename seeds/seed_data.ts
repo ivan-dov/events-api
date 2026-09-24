@@ -16,26 +16,26 @@ const events: CreateEvent[] = [
     {
         name: 'Vertigo Recovery Retreat',
         city: 'Munich',
-        starts_on: new Date(2027, 0, 27),
+        starts_on: '2027-01-27',
         budget_cents: 10_000_000,
     },
     {
         name: 'Sydney Synergy Slam',
         city: 'Sydney',
-        starts_on: new Date(2026, 10, 12),
+        starts_on: '2026-11-12',
         budget_cents: 4_500_000,
     },
     {
         name: 'Brisbane Blue-Sky Bonanza',
         city: 'Brisbane',
-        starts_on: new Date(2026, 9, 5),
+        starts_on: '2026-10-05',
         budget_cents: 2_000_000,
     },
     {
         // deliberately has no bookings
         name: 'Sydney Sprint to Nowhere',
         city: 'Sydney',
-        starts_on: new Date(2027, 2, 3),
+        starts_on: '2027-03-03',
         budget_cents: 8_000_000,
     },
 ];
