@@ -1,10 +1,22 @@
-/** @type {import("knex").Knex.Config} */
-module.exports = {
+/** @type {Omit<import("knex").Knex.Config, "connection">} */
+const base = {
     client: 'pg',
-    connection:
-        process.env.DATABASE_URL ??
-        'postgres://postgres:pw@localhost:5432/events',
     migrations: { directory: './migrations', extension: 'ts' },
     seeds: { directory: './seeds', extension: 'ts' },
-    debug: true,
+};
+
+module.exports = {
+    development: {
+        ...base,
+        connection:
+            process.env.DATABASE_URL ??
+            'postgres://postgres:pw@localhost:5432/events',
+        debug: true,
+    },
+    test: {
+        ...base,
+        connection:
+            process.env.TEST_DATABASE_URL ??
+            'postgres://postgres:pw@localhost:5432/events_test',
+    },
 };

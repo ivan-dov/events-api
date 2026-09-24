@@ -1,0 +1,2 @@
+CREATE DATABASE events;
+CREATE DATABASE events_test;
