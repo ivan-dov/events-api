@@ -45,15 +45,31 @@ export type EventsSearchParams = z.infer<typeof EventsSearchParamsSchema>;
 export type PatchEventParams = z.infer<typeof PatchEventParamsSchema>;
 export type CreateEventParams = z.infer<typeof CreateEventParamsSchema>;
 
+export type EventDto = Event & { attendee_count: number };
+
 export const getEvents = async ({
     city,
     limit,
     offset,
-}: EventsSearchParams = {}): Promise<Event[]> => {
-    const query = knex<Event>('events').select('*');
+}: EventsSearchParams = {}): Promise<EventDto[]> => {
+    const query = knex<Event>('events AS e')
+        .leftJoin('bookings AS b', (join) =>
+            join
+                .on('e.id', '=', 'b.event_id')
+                .andOnVal('b.status', '=', 'confirmed'),
+        )
+        .select(
+            'e.id',
+            'e.name',
+            'e.city',
+            'e.starts_on',
+            'e.budget_cents',
+            knex.raw('COUNT(DISTINCT b.attendee_id)::int AS attendee_count'),
+        )
+        .groupBy('e.id');
 
     if (city) {
-        query.where({ city });
+        query.where({ 'e.city': city });
     }
 
     if (limit != null) {
@@ -64,7 +80,7 @@ export const getEvents = async ({
         query.offset(offset);
     }
 
-    return await query;
+    return await query.orderBy('e.starts_on', 'desc').orderBy('e.id', 'asc');
 };
 
 export const getEvent = async (id: number): Promise<Event | undefined> => {
