@@ -5,7 +5,7 @@ export type Booking = {
     event_id: number;
     attendee_id: number;
     status: BookingStatus;
-    cost_cents: number;
+    cost_cents: string;
 };
 
 export type CreateBooking = Omit<Booking, 'id'>;

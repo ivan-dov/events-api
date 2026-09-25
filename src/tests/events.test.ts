@@ -64,11 +64,11 @@ describe('POST /events', () => {
                 name: 'Lavender Raft Torment',
                 city: 'St.Petersburg',
                 starts_on: '2028-02-24',
-                budget_cents: 12,
+                budget_cents: '12',
                 bookings: [
                     {
                         attendee_id: 1,
-                        cost_cents: 2,
+                        cost_cents: '2',
                     },
                 ],
             } satisfies CreateEventParams);
@@ -90,11 +90,11 @@ describe('POST /events', () => {
                 name: 'Lavender Raft Torment',
                 city: 'St.Petersburg',
                 starts_on: '2028-02-24',
-                budget_cents: 12,
+                budget_cents: '12',
                 bookings: [
                     {
                         attendee_id: 1,
-                        cost_cents: 2,
+                        cost_cents: '2',
                     },
                 ],
             } satisfies CreateEventParams);
@@ -115,7 +115,7 @@ describe('POST /events', () => {
                 name: 'Lavender Raft Torment',
                 city: 'St.Petersburg',
                 starts_on: '2028-02-24',
-                budget_cents: 12,
+                budget_cents: '12',
                 bookings: [],
             } satisfies CreateEventParams);
 

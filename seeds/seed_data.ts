@@ -17,26 +17,26 @@ const events: CreateEvent[] = [
         name: 'Vertigo Recovery Retreat',
         city: 'Munich',
         starts_on: '2027-01-27',
-        budget_cents: 10_000_000,
+        budget_cents: (10_000_000).toString(),
     },
     {
         name: 'Sydney Synergy Slam',
         city: 'Sydney',
         starts_on: '2026-11-12',
-        budget_cents: 4_500_000,
+        budget_cents: (4_500_000).toString(),
     },
     {
         name: 'Brisbane Blue-Sky Bonanza',
         city: 'Brisbane',
         starts_on: '2026-10-05',
-        budget_cents: 2_000_000,
+        budget_cents: (2_000_000).toString(),
     },
     {
         // deliberately has no bookings
         name: 'Sydney Sprint to Nowhere',
         city: 'Sydney',
         starts_on: '2027-03-03',
-        budget_cents: 8_000_000,
+        budget_cents: (8_000_000).toString(),
     },
 ];
 
@@ -60,51 +60,51 @@ export async function seed(knex: Knex): Promise<void> {
             event_id: ev(0),
             attendee_id: at(0),
             status: 'confirmed',
-            cost_cents: 120_000,
+            cost_cents: (120_000).toString(),
         },
         {
             event_id: ev(0),
             attendee_id: at(1),
             status: 'confirmed',
-            cost_cents: 135_000,
+            cost_cents: (135_000).toString(),
         },
         {
             event_id: ev(0),
             attendee_id: at(2),
             status: 'cancelled',
-            cost_cents: 120_000,
+            cost_cents: (120_000).toString(),
         },
         // Sydney Sales Kickoff: two confirmed, one pending
         {
             event_id: ev(1),
             attendee_id: at(4),
             status: 'confirmed',
-            cost_cents: 60_000,
+            cost_cents: (60_000).toString(),
         },
         {
             event_id: ev(1),
             attendee_id: at(5),
             status: 'pending',
-            cost_cents: 60_000,
+            cost_cents: (60_000).toString(),
         },
         {
             event_id: ev(1),
             attendee_id: at(3),
             status: 'confirmed',
-            cost_cents: 75_000,
+            cost_cents: (75_000).toString(),
         },
         // Brisbane: one confirmed, one pending
         {
             event_id: ev(2),
             attendee_id: at(3),
             status: 'confirmed',
-            cost_cents: 40_000,
+            cost_cents: (40_000).toString(),
         },
         {
             event_id: ev(2),
             attendee_id: at(0),
             status: 'pending',
-            cost_cents: 40_000,
+            cost_cents: (40_000).toString(),
         },
         // Sydney Product Summit (ev 3): nothing on purpose
     ] satisfies CreateBooking[]);

@@ -2,6 +2,7 @@ import { DatabaseError } from 'pg';
 import z from 'zod';
 import { knex } from '../db';
 import { ConflictError } from '../errors/conflict';
+import { DbBigintSchema } from '../schemas/db';
 import { Attendee } from '../types/attendee';
 import { BookingStatus } from '../types/booking';
 import { DatabaseErrorCode } from '../types/database-error-code';
@@ -11,7 +12,9 @@ import { createBooking, CreateBookingParamsSchema } from './bookings';
 const NameSchema = z.string().trim().max(255).nonempty();
 const CitySchema = z.string().trim().max(255).nonempty();
 const StartsOnSchema = z.iso.date();
-const BudgetCentsSchema = z.int32().nonnegative();
+const BudgetCentsSchema = DbBigintSchema.pipe(
+    z.bigint().nonnegative().transform(String),
+);
 
 export const EventsSearchParamsSchema = z
     .object({

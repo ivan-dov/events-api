@@ -3,7 +3,7 @@ export type Event = {
     name: string;
     city: string;
     starts_on: string;
-    budget_cents: number;
+    budget_cents: string;
 };
 
 export type CreateEvent = Omit<Event, 'id'>;
