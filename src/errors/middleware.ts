@@ -8,6 +8,7 @@ import { UniquenessError } from './catalog/uniqueness-error';
 import { ValidationError } from './catalog/validation-error';
 import { ConflictError } from './conflict';
 import { NetworkError } from './network-error';
+import { env } from '../env';
 
 export const errorMiddleware = (
     error: unknown,
@@ -16,7 +17,9 @@ export const errorMiddleware = (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _: NextFunction,
 ) => {
-    console.error(error);
+    if (env.NODE_ENV !== 'test') {
+        console.error(error);
+    }
 
     let networkError: NetworkError;
 

@@ -13,7 +13,7 @@
         "rollback": "knex migrate:rollback",
         "seed": "knex seed:run",
         "seed:make": "knex seed:make",
-        "test": "node --env-file=.env.test --test",
+        "test": "node --env-file=.env.test --import tsx --test",
         "setup": "node scripts/prep.ts",
         "update": "node scripts/update.ts",
         "lint": "eslint .",
