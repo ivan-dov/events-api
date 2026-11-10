@@ -83,6 +83,7 @@ export const getEvents = async ({
         query.offset(offset);
     }
 
+    // Order deterministically
     return await query.orderBy('e.starts_on', 'desc').orderBy('e.id', 'asc');
 };
 
