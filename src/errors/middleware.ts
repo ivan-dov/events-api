@@ -1,14 +1,14 @@
 import type { NextFunction, Request, Response } from 'express';
-import { inRange } from 'lodash';
+import { inRange } from 'lodash-es';
 import { ZodError } from 'zod';
-import { DependencyError } from './catalog/dependency-error';
-import { InternalError } from './catalog/internal-error';
-import { MalformedInputError } from './catalog/malformed-input-error';
-import { UniquenessError } from './catalog/uniqueness-error';
-import { ValidationError } from './catalog/validation-error';
-import { ConflictError } from './conflict';
-import { NetworkError } from './network-error';
-import { env } from '../env';
+import { env } from '../env.ts';
+import { DependencyError } from './catalog/dependency-error.ts';
+import { InternalError } from './catalog/internal-error.ts';
+import { MalformedInputError } from './catalog/malformed-input-error.ts';
+import { UniquenessError } from './catalog/uniqueness-error.ts';
+import { ValidationError } from './catalog/validation-error.ts';
+import { ConflictError } from './conflict.ts';
+import { NetworkError } from './network-error.ts';
 
 export const errorMiddleware = (
     error: unknown,

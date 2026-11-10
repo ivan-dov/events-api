@@ -1,11 +1,11 @@
-import { Knex } from 'knex';
+import type { Knex } from 'knex';
 import { DatabaseError } from 'pg';
 import z from 'zod';
-import { knex } from '../db';
-import { ConflictError } from '../errors/conflict';
-import { DbBigintSchema } from '../schemas/db';
-import { Booking, CreateBooking } from '../types/booking';
-import { DatabaseErrorCode } from '../types/database-error-code';
+import { knex } from '../db.ts';
+import { ConflictError } from '../errors/conflict.ts';
+import { DbBigintSchema } from '../schemas/db.ts';
+import { Booking, CreateBooking } from '../types/booking.ts';
+import { DatabaseErrorCode } from '../types/database-error-code.ts';
 
 export const CreateBookingParamsSchema = z.object({
     attendee_id: z.int32().positive(),

@@ -1,4 +1,4 @@
-import { NetworkError } from '../network-error';
+import { NetworkError } from '../network-error.ts';
 
 export class MalformedInputError extends NetworkError {
     public statusCode = 400;

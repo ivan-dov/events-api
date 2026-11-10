@@ -1,8 +1,8 @@
 import express from 'express';
-import { handleNotFound } from './errors/handle-not-found';
-import { errorMiddleware } from './errors/middleware';
-import { bookingsRouter } from './routes/bookings';
-import { eventsRouter } from './routes/events';
+import { handleNotFound } from './errors/handle-not-found.ts';
+import { errorMiddleware } from './errors/middleware.ts';
+import { bookingsRouter } from './routes/bookings.ts';
+import { eventsRouter } from './routes/events.ts';
 
 export const app = express();
 

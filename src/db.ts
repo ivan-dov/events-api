@@ -1,7 +1,7 @@
 import initKnex from 'knex';
 import { types } from 'pg';
-import config from '../knexfile.js';
-import { env } from './env';
+import config from '../knexfile.ts';
+import { env } from './env.ts';
 
 types.setTypeParser(types.builtins.DATE, (value) => value);
 

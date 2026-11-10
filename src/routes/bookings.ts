@@ -1,8 +1,11 @@
 import express from 'express';
-import { IncorrectInputError } from '../errors/catalog/incorrect-input-error';
-import { getMissingAttendees } from '../services/attendees';
-import { createBooking, CreateBookingParamsSchema } from '../services/bookings';
-import { hasEvent } from '../services/events';
+import { IncorrectInputError } from '../errors/catalog/incorrect-input-error.ts';
+import { getMissingAttendees } from '../services/attendees.ts';
+import {
+    createBooking,
+    CreateBookingParamsSchema,
+} from '../services/bookings.ts';
+import { hasEvent } from '../services/events.ts';
 
 export const bookingsRouter = express.Router();
 

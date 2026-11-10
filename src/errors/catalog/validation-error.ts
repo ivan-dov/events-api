@@ -1,5 +1,5 @@
 import { ZodError } from 'zod';
-import { NetworkError } from '../network-error';
+import { NetworkError } from '../network-error.ts';
 
 export class ValidationError extends NetworkError {
     public statusCode = 400;

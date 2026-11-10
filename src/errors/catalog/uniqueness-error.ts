@@ -1,5 +1,5 @@
-import { ConflictError } from '../conflict';
-import { NetworkError } from '../network-error';
+import { ConflictError } from '../conflict.ts';
+import { NetworkError } from '../network-error.ts';
 
 export class UniquenessError extends NetworkError {
     public statusCode = 409;

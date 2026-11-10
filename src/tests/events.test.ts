@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import { after, before, beforeEach, describe, it } from 'node:test';
 import request, { Response } from 'supertest';
-import { app } from '../app';
-import { knex } from '../db';
-import { CreateEventParams } from '../services/events';
-import { Event } from '../types/event';
+import { app } from '../app.ts';
+import { knex } from '../db.ts';
+import { CreateEventParams } from '../services/events.ts';
+import { Event } from '../types/event.ts';
 
 before(async () => {
     await knex.migrate.latest();

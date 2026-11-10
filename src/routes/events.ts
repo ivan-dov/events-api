@@ -1,8 +1,8 @@
 import express from 'express';
 import z from 'zod';
-import { IncorrectInputError } from '../errors/catalog/incorrect-input-error';
-import { NotFoundError } from '../errors/catalog/not-found-error';
-import { getMissingAttendees } from '../services/attendees';
+import { IncorrectInputError } from '../errors/catalog/incorrect-input-error.ts';
+import { NotFoundError } from '../errors/catalog/not-found-error.ts';
+import { getMissingAttendees } from '../services/attendees.ts';
 import {
     createEvent,
     CreateEventParamsSchema,
@@ -14,7 +14,7 @@ import {
     hasEvent,
     patchEvent,
     PatchEventParamsSchema,
-} from '../services/events';
+} from '../services/events.ts';
 
 export const eventsRouter = express.Router();
 

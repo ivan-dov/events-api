@@ -1,4 +1,4 @@
-import { knex } from '../db';
+import { knex } from '../db.ts';
 
 export const getMissingAttendees = async (ids: number[]): Promise<number[]> => {
     const existingAttendees = await knex('attendees')

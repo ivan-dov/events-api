@@ -1,11 +1,12 @@
-/** @type {Omit<import("knex").Knex.Config, "connection">} */
-const base = {
+import type { Knex } from 'knex';
+
+const base: Omit<Knex.Config, 'connection'> = {
     client: 'pg',
     migrations: { directory: './migrations', extension: 'ts' },
     seeds: { directory: './seeds', extension: 'ts' },
 };
 
-module.exports = {
+export default {
     development: {
         ...base,
         connection:
@@ -19,4 +20,4 @@ module.exports = {
             process.env.TEST_DATABASE_URL ??
             'postgres://postgres:pw@localhost:5432/events_test',
     },
-};
+} satisfies Record<string, Knex.Config>;

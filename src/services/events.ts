@@ -1,13 +1,13 @@
 import { DatabaseError } from 'pg';
 import z from 'zod';
-import { knex } from '../db';
-import { ConflictError } from '../errors/conflict';
-import { DbBigintSchema } from '../schemas/db';
-import { Attendee } from '../types/attendee';
-import { BookingStatus } from '../types/booking';
-import { DatabaseErrorCode } from '../types/database-error-code';
-import { Event } from '../types/event';
-import { createBooking, CreateBookingParamsSchema } from './bookings';
+import { knex } from '../db.ts';
+import { ConflictError } from '../errors/conflict.ts';
+import { DbBigintSchema } from '../schemas/db.ts';
+import { Attendee } from '../types/attendee.ts';
+import { BookingStatus } from '../types/booking.ts';
+import { DatabaseErrorCode } from '../types/database-error-code.ts';
+import { Event } from '../types/event.ts';
+import { createBooking, CreateBookingParamsSchema } from './bookings.ts';
 
 const NameSchema = z.string().trim().max(255).nonempty();
 const CitySchema = z.string().trim().max(255).nonempty();
